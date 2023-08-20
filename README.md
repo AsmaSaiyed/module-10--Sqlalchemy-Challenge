@@ -1,4 +1,4 @@
-# module-10--Sqlalchemy-Challenge
+# Sqlalchemy-Challenge -Hawaii
 
 This file includes the use of Pandas, Sqlalchemy, VSCode and Flask to conduct a climate analysions for a Hawaii Vacation trip. 
 The files (climate_starter.ipynb and hawaii.sqlite) were used to complete your climate analysis and data exploration and are present in the Resourcces file.
