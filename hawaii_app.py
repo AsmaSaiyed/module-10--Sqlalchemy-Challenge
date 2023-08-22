@@ -55,8 +55,8 @@ def welcome():
 
     @app.route("/api/v1.0/precipitation")
     def  precipitation():
-    # Create a session (link) from Python to the DB
-    session = Session(engine)
+    # Create a session (link) from Python to the DB 
+        session = Session(engine)
 
     # getting the precipitation data for most recent date in the data 
     most_recent_date = session.query(func.max(measurement.date)).first()
@@ -72,18 +72,17 @@ def welcome():
     session.close
     
     # making a dictionary with the key of prcp and date
-        precip = {date: prcp for date, prcp in last_year_prcp}
+    precip = {date: prcp for date, prcp in last_year_prcp}
 
     # Return the JSON representation of your dictionary.
-       return jsonify (precip)       
-
+    return jsonify (precip)       
 
 
     @app.route("/api/v1.0/stations")
     def stations():
 
     # Create a session (link) from Python to the DB
-    session = Session(engine)
+        Session = Session(engine)
 
     # Query for all the stations.
     stations = session.query(Station.station, Station.name,
@@ -94,7 +93,7 @@ def welcome():
 
 
     # presenting the stations into a dictionary
-        all_stations = []
+    all_stations = []
     for stations, name, latitude, longitude, elevation in stations:
         station_dict = {}
         station_dict["station"] = station
@@ -115,11 +114,11 @@ def welcome():
     def Temperature():
 
     # Create session (link) from Python to the DB
-    session = Session(engine)
+        Session = Session(engine)
 
     # Query the dates and temperature observations of the most-active station for the previous year of data.
     # Find the most- active station of the data
-     most_active_station = session.query(measurement.station).group_by(measurement.station).\
+    most_active_station = session.query(measurement.station).group_by(measurement.station).\
                         order_by(func.count(measurement.station).desc()).first()
      
     # Return a list of temperature observations for the previous year.
@@ -129,45 +128,48 @@ def welcome():
     filter(func.strftime(measurement.date) >date_year_ago ).all()
     
     #  Close session
-     session.close()
+    session.close()
 
     # present the query data as a dictionary
-      tobs_temp_12  = {date: tobs for date, tobs in last_12_months}
+    tobs_temp_12  = {date: tobs for date, tobs in last_12_months}
 
     # Return a JSON list of temperature observations for the previous year.  
-      return jsonify( tobs_temp_12)
+    return jsonify( tobs_temp_12)
 
 
 
 
- @app.route("/api/v1.0/<start>", defaults={'end': None})
+    @app.route("/api/v1.0/<start>", defaults={'end': None})
  
-  @app.route("/api/v1.0/<start>/<end>")
+    @app.route("/api/v1.0/<start>/<end>")
 
-  def temp_stats(start,end):
+    def temp_stats(start,end):
 
 #  Create a session (link) from Python to the DB
-   session = Session(engine)
+        session = Session(engine)
 
 # For a specified start, calculate TMIN, TAVG, and TMAX for all the dates greater than or equal to the start date.
-results_start = session.query(func.min(measurement.tobs), func.max(measurement.tobs), func.avg(measurement.tobs)).\
+        results_start = session.query(func.min(measurement.tobs), func.max(measurement.tobs), func.avg(measurement.tobs)).\
               filter(measurement.date >= start).order_by(measurement.date.desc()).all()
 
 # For a specified start date and end date, calculate TMIN, TAVG, and TMAX for the dates from the start date to the end date, inclusive.
-results_start_end = session.query(func.min(measurement.tobs), func.avg(measurement.tobs), func.max(measurement.tobs))\
+        results_start_end = session.query(func.min(measurement.tobs), func.avg(measurement.tobs), func.max(measurement.tobs))\
         .filter(measurement.date >= start)\
         .filter(measurement.date <= end).all()
 
  #  Close session
-   session.close()
+    session.close()
 
 #  presenting the queries as dictonaries
     for temps in results_start:
-        dict1 = {"Minimum Temp":results[0][0],,"Maximum Temp":results[0][1]"Average Temp":results[0][2]}
+        dict1 = {"Minimum Temp":results[0][0],"Maximum Temp":results[0][1],"Average Temp":results[0][2]}
 
     for temps in results_start_end:
-        dict2 = {"Minimum Temp":results[0][0],,"Maximum Temp":results[0][1]"Average Temp":results[0][2]}
+        dict2 = {"Minimum Temp":results[0][0],"Maximum Temp":results[0][1],"Average Temp":results[0][2]}
  # Return a JSON list of stations from the dataset. 
-    return jsonify(dict1,dict2) 
+             
+    return jsonify (dict1,dict2) 
     
-
+if __name__ == "__main__":
+    app.run(debug=True)
+  
