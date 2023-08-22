@@ -5,35 +5,29 @@ import datetime as dt
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, func
+from sqlalchemy import create_engine, func,inspect
 
 from flask import Flask, jsonify
 
-#################################################
-# Database Setup
-#################################################
 engine = create_engine("sqlite:///Resources/hawaii.sqlite")
-
 # reflect an existing database into a new model
 Base = automap_base()
 
-
 # reflect the tables
-
 Base.prepare(autoload_with=engine)
-
-# Save references to each table
+# View all of the classes that automap found
 print(Base.classes.keys())
 
+# Save references to each table
 
 measurement = Base.classes.measurement
 station = Base.classes.station
 
-Create our session (link) from Python to the DB
+# Create our session (link) from Python to the DB
 
 
 ################################################
-Flask Setup
+# Flask Setup
 ################################################
 app = Flask(__name__)
 
@@ -53,6 +47,7 @@ def welcome():
         f"/api/v1.0/<start>/<end>"
     )
 
+            
 
 
     @app.route("/api/v1.0/precipitation")
@@ -79,7 +74,8 @@ def welcome():
     # Return the JSON representation of your dictionary.
     return jsonify (precip)       
 
-
+    
+    print("\n")
     @app.route("/api/v1.0/stations")
     def stations():
 
