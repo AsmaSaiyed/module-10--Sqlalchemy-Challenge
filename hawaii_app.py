@@ -16,23 +16,25 @@ engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 
 # reflect an existing database into a new model
 Base = automap_base()
-Base.prepare(engine, reflect=True)
+
 
 # reflect the tables
 
 Base.prepare(autoload_with=engine)
 
 # Save references to each table
+print(Base.classes.keys())
+
 
 measurement = Base.classes.measurement
 station = Base.classes.station
 
-# Create our session (link) from Python to the DB
+Create our session (link) from Python to the DB
 
 
-#################################################
-# Flask Setup
-#################################################
+################################################
+Flask Setup
+################################################
 app = Flask(__name__)
 
 
